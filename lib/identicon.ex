@@ -73,6 +73,9 @@ defmodule Identicon do
     %Identicon.Image{image | grid: grid}
   end
 
+  @doc """
+    Build the pixel map that we'll give to EGD
+  """
   def build_pixel_map(%Identicon.Image{grid: grid} = image) do
     pixel_map = Enum.map grid, fn({_code, i}) ->
       x1 = rem(i, 5) * 50
@@ -87,6 +90,9 @@ defmodule Identicon do
     %Identicon.Image{image | pixel_map: pixel_map}
   end
 
+  @doc """
+    Generate the image binary using EGD
+  """
   def draw_image(%Identicon.Image{color: color, pixel_map: pixel_map}) do
     image = :egd.create(250, 250)
     fill = :egd.color(color)
@@ -98,6 +104,9 @@ defmodule Identicon do
     :egd.render(image)
   end
 
+  @doc """
+    Write the image binary to disk
+  """
   def save_image(image, filename) do
     File.write("#{filename}.png", image)
   end
